@@ -21,6 +21,22 @@ from genai_bench.cli.validation import (
 # NOTE: when adding new options, please add them at the top of the func, as
 # the decorator works in reversed order
 def api_options(func):
+
+    func = click.option(
+        "--latency-unit",
+        type=click.Choice(
+            [
+                "seconds",
+                "milliseconds",
+            ],
+            case_sensitive=False,
+        ),
+        required=False,
+        # prompt=True,
+        default="seconds",
+        help="The unit of latency to use for the experiment. It can improve"
+        "the visualization of the results. Default: seconds.",
+    )
     func = click.option(
         "--additional-request-params",
         type=str,

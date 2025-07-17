@@ -1,8 +1,22 @@
 import os
 from pathlib import Path
+import datetime
 
 from transformers import PreTrainedTokenizer
 
+def convert_latency_value(value_seconds: float | None, target_unit: str = "seconds") -> float | None:
+    """
+    this fn converts latency values between seconds and milliseconds.
+    """
+    if value_seconds is None:
+        return None
+
+    if target_unit == "seconds":
+        return datetime.timedelta(seconds=value_seconds).total_seconds()
+    elif target_unit == "milliseconds":
+        return datetime.timedelta(seconds=value_seconds).total_seconds() * 1000 # maybe simpler but suffices.
+    else:
+        raise ValueError(f"Unsupported target unit: {target_unit}")
 
 def sanitize_string(input_str: str):
     """
