@@ -4,7 +4,9 @@ import datetime
 
 from transformers import PreTrainedTokenizer
 
-def convert_latency_value(value_seconds: float | None, target_unit: str = "seconds") -> float | None:
+def convert_latency_value(
+    value_seconds: float | None, target_unit: str = "seconds"
+) -> float | None:
     """
     this fn converts latency values between seconds and milliseconds.
     """
@@ -14,7 +16,29 @@ def convert_latency_value(value_seconds: float | None, target_unit: str = "secon
     if target_unit == "seconds":
         return datetime.timedelta(seconds=value_seconds).total_seconds()
     elif target_unit == "milliseconds":
-        return datetime.timedelta(seconds=value_seconds).total_seconds() * 1000 # maybe simpler but suffices.
+        return (
+            datetime.timedelta(seconds=value_seconds).total_seconds() * 1000
+        )  # maybe simpler but suffices.
+    else:
+        raise ValueError(f"Unsupported target unit: {target_unit}")
+
+
+def convert_label(label: str, target_unit: str = "seconds") -> str:
+    """
+    Convert a latency label to the specified unit.
+    """
+    # assume that all original labels are in seconds
+    # so no need to handle the miliseconds -> seconds conversion
+    if target_unit == "seconds":
+        return label
+    elif target_unit == "milliseconds":
+        return (
+            label.replace(" (s)", " (ms)")
+            .replace(" (s)", " (ms)")
+            .replace(" seconds", " milliseconds")
+            .replace(" seconds", " milliseconds")
+        )
+        # TODO: add more replacements if needed AND manually check the labels
     else:
         raise ValueError(f"Unsupported target unit: {target_unit}")
 
